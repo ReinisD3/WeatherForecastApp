@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Create two equal columns that floats next to each other */
+        .column {
+            float: left;
+            width: 50%;
+            padding: 10px;
+            height: 300px; /* Should be removed. Only for demonstration */
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+
+
+<div >
+    <h3 class="mb-4 pb-2 fw-normal">Check the weather forecast</h3>
+
+    <form method="post" class="input-group rounded mb-3">
+        <input type="text" name="city" class="form-control" placeholder="City" aria-label="Search"
+               aria-describedby="search-addon"/>
+        <button class="btn btn-warning btn-sm" name="submit" id="btn-chat">
+            Check Weather!
+        </button>
+        </a>
+    </form>
+</div>
+
+<div class="row">
+    <div class="column">
+        <section class="vh-100">
+            <div class="container py-5 h-100">
+
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-md-8 col-lg-6 col-xl-4">
+
+
+                        <h4><strong>3 day forecast for : <?= $next3DaysForecast->location->name ?></strong></h4>
+                        <?php foreach($next3DaysForecast->forecast->forecastday as $day) : ?>
+                        <div class="card shadow-0 border">
+                            <div class="card-body p-4">
+
+                                <h4 class="mb-1 sfw-normal"><?= $day->date ?></h4>
+                                <p class="mb-2">Average temperature: <strong><?= $day->day->avgtempC ?> C</strong></p>
+                                <p>Max wind gusts: <strong><?= $day->day->maxwindKph ?> km/h</strong></p>
+                                <p>Max t: <strong><?= $day->day->maxtempC ?> C</strong>, Min t: <strong><?= $day->
+                                    day->mintempC ?> C</strong></p>
+
+                                <div class="d-flex flex-row align-items-center">
+                                    <p class="mb-0 me-4"><?= $day->day->condition->text ?></p>
+                                    <img src='<?= $day->day->condition->icon ?>'>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <?php endforeach ?>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+    <div class="column" >
+        <h4>Forecast for next 8 hours</h4>
+        <?php foreach($next8Hours as $hour) : ?>
+
+        <p> <?= $hour->getTime() ?><br>
+            Temperature: <?= $hour->getTemperature() ?> C |
+            Wind: <?= $hour->getWind() ?> km/h |
+            <?= $hour->getIconText() ?> <img src='<?= $hour->getIcon() ?>'></p>
+
+
+        <?php endforeach ?>
+    </div>
+</div>
+
+
+</body>
+</html>
