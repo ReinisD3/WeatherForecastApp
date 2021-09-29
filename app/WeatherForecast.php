@@ -4,7 +4,7 @@ namespace App;
 
 use JsonSerializable;
 
-class WeatherForecastAttributes
+class WeatherForecast
 {
 
     private string $time;
@@ -12,8 +12,10 @@ class WeatherForecastAttributes
     private float $wind;
     private string $icon;
     private string $iconText;
+    private ?float $maxTemp;
+    private ?float $minTemp;
 
-    public function __construct(string $time , float $temperature , float $wind ,string $icon,string $iconText)
+    public function __construct(string $time , float $temperature , float $wind ,string $icon,string $iconText, float $maxTemp = null, float $minTemp = null)
     {
 
         $this->time = $time;
@@ -21,6 +23,8 @@ class WeatherForecastAttributes
         $this->wind = $wind;
         $this->icon = $icon;
         $this->iconText = $iconText;
+        $this->maxTemp = $maxTemp;
+        $this->minTemp = $minTemp;
     }
 
     public function getTime(): string
@@ -45,5 +49,15 @@ class WeatherForecastAttributes
     public function getIconText(): string
     {
         return $this->iconText;
+    }
+
+    public function getMaxTemp(): ?float
+    {
+        return $this->maxTemp;
+    }
+
+    public function getMinTemp(): ?float
+    {
+        return $this->minTemp;
     }
 }

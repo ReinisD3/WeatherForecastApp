@@ -54,20 +54,20 @@
                     <div class="col-md-8 col-lg-6 col-xl-4">
 
 
-                        <h4><strong>3 day forecast for : <?= $next3DaysForecast->location->name ?></strong></h4>
-                        <?php foreach($next3DaysForecast->forecast->forecastday as $day) : ?>
+                        <h4><strong>3 day forecast for <?= $city ?>  : <?= $searchedCity ?></strong></h4>
+                        <?php foreach($nextDaysForecast as $day) : ?>
                         <div class="card shadow-0 border">
                             <div class="card-body p-4">
 
-                                <h4 class="mb-1 sfw-normal"><?= $day->date ?></h4>
-                                <p class="mb-2">Average temperature: <strong><?= $day->day->avgtempC ?> C</strong></p>
-                                <p>Max wind gusts: <strong><?= $day->day->maxwindKph ?> km/h</strong></p>
-                                <p>Max t: <strong><?= $day->day->maxtempC ?> C</strong>, Min t: <strong><?= $day->
-                                    day->mintempC ?> C</strong></p>
+                                <h4 class="mb-1 sfw-normal"><?= $day->getTime() ?></h4>
+                                <p class="mb-2">Average temperature: <strong><?= $day->getTemperature() ?> C</strong></p>
+                                <p>Max wind gusts: <strong><?= $day->getWind() ?> km/h</strong></p>
+                                <p>Max t: <strong><?= $day->getMaxTemp() ?> C</strong>,
+                                    Min t: <strong><?= $day->getMinTemp() ?> C</strong></p>
 
                                 <div class="d-flex flex-row align-items-center">
-                                    <p class="mb-0 me-4"><?= $day->day->condition->text ?></p>
-                                    <img src='<?= $day->day->condition->icon ?>'>
+                                    <p class="mb-0 me-4"><?= $day->getIconText() ?></p>
+                                    <img src='<?= $day->getIcon() ?>'>
 
                                 </div>
 
@@ -82,8 +82,8 @@
         </section>
     </div>
     <div class="column" >
-        <h4>Forecast for next 8 hours</h4>
-        <?php foreach($next8Hours as $hour) : ?>
+        <h4><strong><?= $city ?> for next <?= $hoursToShow ?> hours</strong></h4>
+        <?php foreach($nextHours as $hour) : ?>
 
         <p> <?= $hour->getTime() ?><br>
             Temperature: <?= $hour->getTemperature() ?> C |

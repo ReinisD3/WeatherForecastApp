@@ -4,24 +4,27 @@ require_once 'vendor/autoload.php';
 
 use App\Connection;
 
+$city = 'Riga';
 
-$connection = new Connection('Riga');
-
+$connection = new Connection($city);
 
 if (isset($_POST['submit']))
 {
-    if (empty($_POST['city']))
+    $city = $_POST['city'];
+    if (empty($city))
     {
         echo 'Please Enter City name';
 
     }else
     {
-        $connection->setCity($_POST['city']) ;
+        $connection = new Connection($city) ;
     }
 }
-$next8Hours = $connection->getNext8HourForecast();
 
-$next3DaysForecast = $connection->get3DayForecast();
+$hoursToShow = 9;
+$nextHours = $connection->getNextHourForecast($hoursToShow);
+
+$nextDaysForecast = $connection->getDayForecast();
 
 
 require 'index.view.html';

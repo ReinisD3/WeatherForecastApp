@@ -2,26 +2,43 @@
 
 namespace App;
 
-use WeatherAPILib\WeatherAPIClient;
-use WeatherAPILib\Controllers\APIsController;
-use JsonSerializable;
+
 
 class Connection
 {
-    private string $key = '069d90cba34749c399575430212809';
-    private APIsController $aPIs;
+
+
     private string $city;
+    private string $key;
+    private \stdClass $data;
 
     public function __construct(string $defaultCity)
     {
         $this->city = $defaultCity;
-        $client = new WeatherAPIClient($this->key);
-        $this->aPIs = $client->getAPIs();
+        $d = 3;
+
+        $this->key = "http://api.weatherapi.com/v1/forecast.json?key=069d90cba34749c399575430212809&q='.$this->city.'&days='.$d.'&aqi=no&alerts=no";
+        var_dump($this->key);
+        $this->data = json_decode(file_get_contents($this->key));
+
     }
 
-    public function get3DayForecast(): JsonSerializable
+    public function getDayForecast(): array
     {
-        return $this->aPIs->getForecastWeather($this->city, 3);
+
+        $dayForecast = [];
+        foreach ($this->data->forecast->forecastday as $day) {
+            $dayForecast[] = new WeatherForecast(
+                $day->date,
+                $day->day->avgtemp_c,
+                $day->day->maxwind_kph,
+                $day->day->condition->icon,
+                $day->day->condition->text,
+                $day->day->maxtemp_c,
+                $day->day->mintemp_c);
+        }
+
+        return $dayForecast;
     }
 
     public function setCity(string $city): void
@@ -29,19 +46,26 @@ class Connection
         $this->city = $city;
     }
 
-    public function getNext8HourForecast(): array
+    public function getNextHourForecast(int $hours): array
     {
         $time = time();
-        $data = json_decode(file_get_contents(
-            "http://api.weatherapi.com/v1/forecast.json?key=069d90cba34749c399575430212809&q=.$this->city.&days=1&aqi=no&alerts=no"));
+
         $i = 0;
         $next8Hours = [];
+        foreach ($this->data->forecast->forecastday as $day) {
+            foreach ($day->hour as $dayHour) {
 
-        foreach ($data->forecast->forecastday[0]->hour as $hourRecord) {
-            if ($time < $hourRecord->time_epoch && $i < 8) {
-                $i++;
-                $next8Hours [] = new WeatherForecastAttributes($hourRecord->time, $hourRecord->temp_c, $hourRecord->wind_kph, $hourRecord->condition->icon,$hourRecord->condition->text);
+                if($i >= $hours) continue;
+                if ($time < $dayHour->time_epoch) {
+                    $i++;
+                    $next8Hours [] = new WeatherForecast(
+                        $dayHour->time,
+                        $dayHour->temp_c,
+                        $dayHour->wind_kph,
+                        $dayHour->condition->icon,
+                        $dayHour->condition->text);
 
+                }
             }
         }
         return $next8Hours;
