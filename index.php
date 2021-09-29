@@ -6,7 +6,7 @@ use App\Connection;
 
 $city = 'Riga';
 
-$connection = new Connection($city);
+$connection = new Connection($city,'3');
 
 if (isset($_POST['submit']))
 {
@@ -17,7 +17,7 @@ if (isset($_POST['submit']))
 
     }else
     {
-        $connection = new Connection($city) ;
+        $connection = new Connection($city,'3') ;
     }
 }
 

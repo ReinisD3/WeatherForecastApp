@@ -11,14 +11,13 @@ class Connection
     private string $city;
     private string $key;
     private \stdClass $data;
+    private string $days;
 
-    public function __construct(string $defaultCity)
+    public function __construct(string $defaultCity, string $days)
     {
         $this->city = $defaultCity;
-        $d = 3;
-
-        $this->key = "http://api.weatherapi.com/v1/forecast.json?key=069d90cba34749c399575430212809&q='.$this->city.'&days='.$d.'&aqi=no&alerts=no";
-        var_dump($this->key);
+        $this->days = $days;
+        $this->key = "http://api.weatherapi.com/v1/forecast.json?key=069d90cba34749c399575430212809&q={$this->city}&days={$this->days}&aqi=no&alerts=no";
         $this->data = json_decode(file_get_contents($this->key));
 
     }
