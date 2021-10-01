@@ -35,7 +35,7 @@
 <div >
     <h3 class="mb-4 pb-2 fw-normal">Check the weather forecast</h3>
 
-    <form method="post" class="input-group rounded mb-3">
+    <form method="get" class="input-group rounded mb-3">
         <input type="text" name="city" class="form-control" placeholder="City" aria-label="Search"
                aria-describedby="search-addon"/>
         <button class="btn btn-warning btn-sm" name="submit" id="btn-chat">
@@ -55,7 +55,7 @@
 
 
                         <h4><strong>3 day forecast for <?= $city ?>  : <?= $searchedCity ?></strong></h4>
-                        <?php foreach($nextDaysForecast as $day) : ?>
+                        <?php foreach($nextDaysForecasts->weatherCollection() as $day) : ?>
                         <div class="card shadow-0 border">
                             <div class="card-body p-4">
 
@@ -83,12 +83,12 @@
     </div>
     <div class="column" >
         <h4><strong><?= $city ?> for next <?= $hoursToShow ?> hours</strong></h4>
-        <?php foreach($nextHours as $hour) : ?>
+        <?php foreach($nextHours->weatherCollection() as $hourforecast) : ?>
 
-        <p> <?= $hour->getTime() ?><br>
-            Temperature: <?= $hour->getTemperature() ?> C |
-            Wind: <?= $hour->getWind() ?> km/h |
-            <?= $hour->getIconText() ?> <img src='<?= $hour->getIcon() ?>'></p>
+        <p> <?= $hourforecast->getTime() ?><br>
+            Temperature: <?= $hourforecast->getTemperature() ?> C |
+            Wind: <?= $hourforecast->getWind() ?> km/h |
+            <?= $hourforecast->getIconText() ?> <img src='<?= $hourforecast->getIcon() ?>'></p>
 
 
         <?php endforeach ?>

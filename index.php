@@ -2,29 +2,21 @@
 
 require_once 'vendor/autoload.php';
 
-use App\Connection;
+use App\Connections\WeatherApi;
+use App\Services\DaysForecastService;
+use App\Services\HoursForecastService;
 
-$city = 'Riga';
 
-$connection = new Connection($city,'3');
+$city = isset($_GET['submit']) ? $_GET['city'] ?? 'Riga' : 'Riga';
 
-if (isset($_POST['submit']))
-{
-    $city = $_POST['city'];
-    if (empty($city))
-    {
-        echo 'Please Enter City name';
+$weatherApi = new Weatherapi('069d90cba34749c399575430212809' ,$city, 3);
+$weatherData = $weatherApi->weatherData();
 
-    }else
-    {
-        $connection = new Connection($city,'3') ;
-    }
-}
+$nextDaysForecasts = (new DaysForecastService($weatherData))->execute();
 
 $hoursToShow = 9;
-$nextHours = $connection->getNextHourForecast($hoursToShow);
+$nextHours = (new HoursForecastService($weatherData))->execute($hoursToShow);
 
-$nextDaysForecast = $connection->getDayForecast();
 
 
 require 'index.view.html';
