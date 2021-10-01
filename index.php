@@ -7,9 +7,12 @@ use App\Services\DaysForecastService;
 use App\Services\HoursForecastService;
 
 
+
 $city = isset($_GET['submit']) ? $_GET['city'] ?? 'Riga' : 'Riga';
 
-$weatherApi = new Weatherapi('069d90cba34749c399575430212809' ,$city, 3);
+$configWeatherApi = json_decode(file_get_contents('config.WeatherApi.json'),true);
+
+$weatherApi = new WeatherApi($configWeatherApi['apiKey'] ,$city, 3);
 $weatherData = $weatherApi->weatherData();
 
 $nextDaysForecasts = (new DaysForecastService($weatherData))->execute();
