@@ -6,14 +6,9 @@ use App\Connections\ApiConnectionInterface;
 use App\WeatherForecastCollection;
 use App\WeatherForecast;
 
-class DaysForecastService
+class DaysForecastService extends ForecastService
 {
-    private \stdClass  $apiData ;
 
-    public function __construct(\stdClass $apiData)
-    {
-        $this->apiData = $apiData;
-    }
     public function execute(int $days = 3): WeatherForecastCollection
     {
         $daysForecasts = new WeatherForecastCollection();
@@ -27,7 +22,6 @@ class DaysForecastService
                 $day->day->maxtemp_c,
                 $day->day->mintemp_c));
         }
-    //var_dump($daysForecasts);
         return $daysForecasts;
     }
 }

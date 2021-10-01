@@ -6,14 +6,9 @@ use App\Connections\ApiConnectionInterface;
 use App\WeatherForecast;
 use App\WeatherForecastCollection;
 
-class HoursForecastService
+class HoursForecastService extends ForecastService
 {
-    private \stdClass $apiData;
 
-    public function __construct(\stdClass $apiData)
-    {
-        $this->apiData = $apiData;
-    }
     public function execute(int $hours): WeatherForecastCollection
     {
         $time = time();
